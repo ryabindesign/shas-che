@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Щас чё? — фан-концепт мерча</title>
+<meta name="description" content="Каким мог бы быть мерч Лёхи Мустанга. Фан-концепт Катерины Рябининой, студия 10:13. Не продаётся.">
+<meta property="og:title" content="Щас чё? — фан-концепт мерча">
+<meta property="og:description" content="Каким мог бы быть мерч Лёхи Мустанга. Листай — и он обернётся.">
+<meta property="og:image" content="https://ryabindesign.github.io/shas-che/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@font-face {
+  font-family: "TikTok Sans";
+  src: url("assets/TikTokSans.ttf") format("truetype");
+  font-weight: 300 900;
+  font-stretch: 75% 150%;
+  font-display: swap;
+}
+:root {
+  --bg: #212020;
+  --ink: #F2F0EB;
+  --muted: rgba(242, 240, 235, .64);
+  --line: rgba(242, 240, 235, .16);
+  --lime: #BFF831;
+  --lilac: #887CD8;
+  --pad: clamp(20px, 3vw, 48px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: "TikTok Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+
+/* мелкие подписи: узкий TikTok Sans капсом вместо моноширинного */
+.mono {
+  font-stretch: 75%; font-weight: 500; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+
+/* ---------- сцена ---------- */
+.hero { position: relative; height: 520vh; }
+.sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+#cv { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; }
+.vignette {
+  position: absolute; inset: 0; pointer-events: none; transition: opacity .5s;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.42), transparent 35%, transparent 62%, rgba(0,0,0,.42)),
+    linear-gradient(180deg, rgba(0,0,0,.38), transparent 28%, transparent 64%, rgba(0,0,0,.62));
+}
+.flight .vignette { opacity: .55; }
+
+/* всё, что исчезает в полёте */
+.ui { transition: opacity .25s linear; }
+.flight .ui, .finale .ui { opacity: 0; pointer-events: none; }
+
+/* ---------- шапка ---------- */
+.bar {
+  position: absolute; left: var(--pad); right: var(--pad); top: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 18px 0; border-bottom: 1px solid var(--line);
+  transition: transform .5s var(--ease), opacity .5s var(--ease);
+}
+.flight .bar { transform: translateY(-24px); opacity: 0; pointer-events: none; }
+.logo { display: block; width: clamp(120px, 11vw, 168px); perspective: 600px; }
+.logo svg { display: block; width: 100%; height: auto; animation: sway 9s ease-in-out infinite; transform-origin: 50% 50%; }
+@keyframes sway { 0%, 100% { transform: rotateY(-14deg); } 50% { transform: rotateY(14deg); } }
+.nav { display: flex; gap: 28px; font-size: 14px; }
+.nav a { position: relative; }
+.nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease);
+}
+.nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+.actions { display: flex; gap: 8px; }
+
+/* ---------- кнопки ---------- */
+.btn {
+  position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 8px;
+  height: 44px; padding: 0 20px; border: 0; border-radius: 2px; cursor: pointer;
+  font: 500 14px/1 "TikTok Sans", system-ui, sans-serif; transition: color .45s var(--ease);
+  isolation: isolate;
+}
+.btn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  transform: scaleY(0); transform-origin: bottom; transition: transform .45s var(--ease);
+}
+.btn:hover::before { transform: scaleY(1); }
+.btn-lime { background: var(--lime); color: #111; }
+.btn-lime::before { background: var(--lilac); }
+.btn-lime:hover { color: #fff; }
+.btn-dark { background: rgba(20, 20, 20, .9); color: var(--ink); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.btn-dark::before { background: var(--ink); }
+.btn-dark:hover { color: #111; }
+.btn .arr { display: inline-block; transition: transform .45s var(--ease); }
+.btn:hover .arr { transform: translateX(3px); }
+
+/* ---------- первый экран ---------- */
+.list { position: absolute; left: var(--pad); top: calc(var(--pad) + 96px); display: grid; gap: 6px; }
+.list span::before { content: "/ "; color: var(--muted); }
+.lead {
+  position: absolute; right: var(--pad); top: calc(var(--pad) + 92px);
+  max-width: min(38vw, 440px); text-align: right;
+  font-size: clamp(17px, 1.5vw, 22px); line-height: 1.35; font-weight: 400;
+  text-shadow: 0 1px 18px rgba(0,0,0,.35);
+}
+.clock { position: absolute; left: var(--pad); top: 50%; transform: translateY(-50%); }
+.clock b { font-weight: 500; color: var(--lime); }
+.title { position: absolute; left: var(--pad); bottom: var(--pad); }
+.chip {
+  display: inline-block; margin-bottom: 18px; padding: 7px 10px;
+  background: var(--lime); color: #111; border-radius: 2px;
+}
+h1 {
+  font-size: clamp(48px, 7.2vw, 116px); line-height: .95; letter-spacing: -.035em; font-weight: 700;
+  text-shadow: 0 2px 30px rgba(0,0,0,.25);
+}
+h1 .row { display: block; }
+h1 .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .18em; margin-bottom: -.18em; }
+h1 .w > span { display: inline-block; transform: translateY(110%); transition: transform 1s var(--ease); }
+.ready h1 .w > span { transform: none; }
+/* приём логотипа: «Щас» узкое и тонкое, «чё?» широкое и жирное */
+h1 .thin { font-stretch: 75%; font-weight: 300; }
+h1 .fat { font-stretch: 150%; font-weight: 900; }
+h1 .q { color: var(--lime); }
+
+.card {
+  position: absolute; right: var(--pad); bottom: var(--pad);
+  width: min(340px, 42vw); padding: 12px; border-radius: 6px;
+  display: flex; gap: 14px; align-items: stretch;
+  background: rgba(255,255,255,.09); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,.14);
+}
+.card img { width: 84px; height: 104px; object-fit: cover; object-position: 50% 30%; border-radius: 3px; flex: none; }
+.card .txt { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+.card h3 { font-size: 16px; font-weight: 600; }
+.card p { color: var(--muted); margin-top: 4px; }
+.card .btn { height: 36px; padding: 0 14px; font-size: 13px; align-self: flex-start; background: var(--ink); color: #111; }
+.card .btn::before { background: var(--lilac); }
+.card .btn:hover { color: #fff; }
+
+.hint { position: absolute; left: 50%; bottom: var(--pad); transform: translateX(-50%); display: grid; justify-items: center; gap: 10px; }
+.hint i { width: 1px; height: 28px; background: var(--ink); transform-origin: top; animation: drip 1.6s ease-in-out infinite; }
+@keyframes drip {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  50.01% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ---------- финал ---------- */
+.end {
+  position: absolute; left: 50%; bottom: var(--pad); width: min(92vw, 640px);
+  transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+  display: grid; justify-items: center; gap: 16px; text-align: center;
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+}
+.finale .end { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.end p { font-size: clamp(18px, 1.7vw, 24px); line-height: 1.3; text-shadow: 0 1px 18px rgba(0,0,0,.4); }
+.end small { color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+/* ---------- загрузка и меню ---------- */
+.loader {
+  position: fixed; inset: 0; z-index: 60; background: var(--bg);
+  display: grid; place-items: center; transition: opacity .6s, visibility .6s;
+}
+.loader.gone { opacity: 0; visibility: hidden; }
+.menu {
+  position: fixed; inset: 0; z-index: 50; padding: 0 var(--pad);
+  background: rgba(20, 19, 19, .96); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  display: grid; grid-template-rows: auto 1fr auto;
+  opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s;
+}
+.menu.open { opacity: 1; visibility: visible; }
+.menu .top { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.menu .top .logo svg { animation: none; }
+.menu nav { display: grid; align-content: center; gap: 4px; }
+.menu nav a {
+  font-size: clamp(40px, 7vw, 96px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
+  opacity: 0; transform: translateY(30px); transition: opacity .5s var(--ease), transform .5s var(--ease), color .3s;
+}
+.menu nav a:hover { color: var(--lime); }
+.menu.open nav a { opacity: 1; transform: none; }
+.menu.open nav a:nth-child(2) { transition-delay: 60ms; }
+.menu.open nav a:nth-child(3) { transition-delay: 120ms; }
+.menu .foot { padding: 22px 0; color: var(--muted); }
+
+/* ---------- телефон ---------- */
+@media (max-width: 820px) {
+  .nav, .lead, .hint, .actions .btn-lime { display: none; }
+  .list { top: calc(var(--pad) + 80px); }
+  .clock { top: auto; bottom: calc(var(--pad) + 330px); transform: none; }
+  h1 { font-size: clamp(40px, 12vw, 64px); }
+  .title { bottom: calc(var(--pad) + 150px); right: var(--pad); }
+  .card { left: var(--pad); width: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="loader mono" id="loader">Загрузка</div>
+
+<header class="hero" id="hero">
+  <div class="sticky" id="stage">
+    <canvas id="cv"></canvas>
+    <div class="vignette"></div>
+
+    <div class="bar">
+      <a href="#" class="logo" aria-label="Щас чё?" data-soon></a>
+      <nav class="nav">
+        <a href="#" data-soon>Худи</a>
+        <a href="#" data-soon>Панамы</a>
+        <a href="#" data-soon>Очки</a>
+        <a href="#" data-soon>О&nbsp;проекте</a>
+      </nav>
+      <div class="actions">
+        <a href="#" class="btn btn-lime" data-soon>Выбрать мерч</a>
+        <button class="btn btn-dark" data-menu>Меню</button>
+      </div>
+    </div>
+
+    <div class="list mono ui">
+      <span>Щас чё?</span>
+      <span>Коллекция 01 — осень&nbsp;26</span>
+      <span>Вещи 01—03</span>
+      <span>Фан-концепт</span>
+    </div>
+
+    <p class="lead ui">Одежда для&nbsp;тех, кто заходит в&nbsp;комнату громче всех. Худи, панамы и&nbsp;очки&nbsp;— каким мог&nbsp;бы быть мерч Лёхи Мустанга.</p>
+
+    <div class="clock mono ui">Мустанговск / <b id="time">00:00:00</b></div>
+
+    <div class="title ui">
+      <span class="chip mono">Фан-концепт · не&nbsp;продаётся</span>
+      <h1>
+        <span class="row"><span class="w"><span>Громко.</span></span> <span class="w"><span>Невпопад.</span></span></span>
+        <span class="row"><span class="w"><span class="thin">Щас</span></span> <span class="w"><span class="fat">чё<span class="q">?</span></span></span></span>
+      </h1>
+    </div>
+
+    <a href="#" class="card ui" data-soon>
+      <img src="assets/hoodie.jpg" alt="Сиреневое худи «Щас чё?»">
+      <span class="txt">
+        <span>
+          <h3>Худи 01 — сиреневое</h3>
+          <p class="mono">Для&nbsp;самых дерзких</p>
+        </span>
+        <span class="btn">Смотреть <span class="arr">→</span></span>
+      </span>
+    </a>
+
+    <div class="hint mono ui">Листай<i></i></div>
+
+    <div class="end">
+      <p>Мерча у&nbsp;Лёхи нет. Но&nbsp;мог&nbsp;бы быть такой.</p>
+      <a href="#" class="btn btn-lime" data-soon>Выбрать мерч</a>
+      <small>Концепт и&nbsp;дизайн&nbsp;— Катерина Рябинина, студия 10:13<br>Посвящается @leha.mustang · фан-проект, мерч неофициальный и&nbsp;не&nbsp;продаётся</small>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="top">
+    <a href="#" class="logo" aria-label="Щас чё?" data-soon></a>
+    <button class="btn btn-dark" data-menu>Закрыть</button>
+  </div>
+  <nav>
+    <a href="#" data-soon>Вещи</a>
+    <a href="#" data-soon>Как придумано</a>
+    <a href="#" data-soon>Связаться</a>
+  </nav>
+  <div class="foot mono">Катерина Рябинина · студия 10:13</div>
+</div>
+
+<script>
+// логотип «Щас чё?»: белые буквы, кислотно-зелёные точки (палитра «Кислота»)
+const LOGO = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 60 4070 1180"><g fill="#F2F0EB"><path d="M620 1080L620 375L683 375L683 1080ZM90 1080L90 375L153 375L153 1080ZM123 1080L123 1025L658 1025L658 1080ZM355 1080L355 375L418 375L418 1080ZM692 1210L692 1080L657 1080L657 1025L753 1025L753 1210Z"/><path d="M785 1080L961 375L1073 375L1249 1080L1185 1080L1017 394L1017 394L849 1080ZM895 777L895 721L1139 721L1139 777Z"/><path d="M1484 1097Q1413 1097 1363 1053.5Q1313 1010 1286.5 927.5Q1260 845 1260 728Q1260 642 1275.5 574Q1291 506 1320 458Q1349 410 1390 384.5Q1431 359 1483 359Q1534 359 1573.5 381.5Q1613 404 1640.5 448.5Q1668 493 1683 558L1622 575Q1601 493 1567 454.5Q1533 416 1483 416Q1432 416 1397 452Q1362 488 1343.5 557.5Q1325 627 1325 728Q1325 826 1344 896Q1363 966 1398.5 1003Q1434 1040 1484 1040Q1534 1040 1567.5 1001Q1601 962 1622 881L1683 898Q1667 964 1639 1008.5Q1611 1053 1572.5 1075Q1534 1097 1484 1097Z"/><path d="M2176 838Q2034 838 1947 808.5Q1860 779 1820.5 714.5Q1781 650 1781 545L1781 375L2012 375L2012 528Q2012 574 2027.5 600.5Q2043 627 2081 637.5Q2119 648 2186 648Q2225 648 2261.5 645.5Q2298 643 2334.5 637Q2371 631 2409 623L2409 807Q2370 816 2327.5 823Q2285 830 2245.5 834Q2206 838 2176 838ZM2383 1080L2383 375L2614 375L2614 1080Z"/><path d="M2698 1080L2698 375L3439 375L3439 545L2824 545L2929 418L2929 1038L2824 910L3442 910L3442 1080ZM2849 806L2849 636L3339 636L3339 806Z"/><path d="M3710 830L3710 662L3779 660Q3835 658 3864.5 637.5Q3894 617 3894 583Q3894 548 3869.5 528Q3845 508 3801 508Q3755 508 3726.5 530Q3698 552 3691 593L3509 563Q3517 500 3557 454.5Q3597 409 3662 384Q3727 359 3812 359Q3899 359 3963.5 385.5Q4028 412 4063.5 460Q4099 508 4099 574Q4099 627 4077 666.5Q4055 706 4012 732.5Q3969 759 3903 772L3856 780L3897 752L3897 830ZM3802 1086Q3753 1086 3719.5 1055Q3686 1024 3686 976Q3686 928 3719.5 896Q3753 864 3802 864Q3852 864 3884.5 896Q3917 928 3917 976Q3917 1024 3884.5 1055Q3852 1086 3802 1086Z"/></g><g fill="#BFF831"><circle cx="2935" cy="240" r="60"/><circle cx="3160" cy="195" r="105"/></g></svg>`;
+document.querySelectorAll('.logo').forEach((el) => (el.innerHTML = LOGO));
+
+// ссылки пока никуда не ведут
+document.querySelectorAll('[data-soon]').forEach((el) => el.addEventListener('click', (e) => e.preventDefault()));
+
+// меню
+const menu = document.getElementById('menu');
+document.querySelectorAll('[data-menu]').forEach((el) => el.addEventListener('click', () => {
+  const open = menu.classList.toggle('open');
+  menu.setAttribute('aria-hidden', String(!open));
+}));
+
+// часы Мустанговска (это Московская область)
+const timeEl = document.getElementById('time');
+const fmt = new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+const tick = () => (timeEl.textContent = fmt.format(new Date()));
+tick(); setInterval(tick, 1000);
+
+// заголовок выезжает по словам
+document.querySelectorAll('h1 .w > span').forEach((s, i) => (s.style.transitionDelay = 120 + i * 80 + 'ms'));
+
+// ---------- видео прокруткой ----------
+const N = 241, src = (i) => `frames/f_${String(i + 1).padStart(3, '0')}.jpg`;
+const hero = document.getElementById('hero'), stage = document.getElementById('stage');
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d', { alpha: false });
+const frames = new Array(N);
+let loaded = 0, cur = 0, lastDrawn = -1, lastP = -1, W = 0, H = 0, dpr = 1;
+
+function resize() {
+  dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  W = cv.clientWidth; H = cv.clientHeight;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  lastDrawn = -1;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ближайший загруженный кадр
+function pick(i) {
+  for (let d = 0; d < N; d++) {
+    if (frames[i - d]) return frames[i - d];
+    if (frames[i + d]) return frames[i + d];
+  }
+  return null;
+}
+
+function draw(i, p) {
+  const img = pick(i); if (!img) return;
+  // в начале картинка сдвинута влево, справа место под текст; к трети пути — по центру
+  // на узком экране сдвига нет: видна только середина кадра, парень должен стоять по центру
+  const shift = W > 820 ? -0.06 * W * Math.max(0, 1 - p / 0.33) : 0;
+  const cw = W + 2 * Math.abs(shift);
+  const s = Math.max(cw / img.naturalWidth, H / img.naturalHeight);
+  const w = img.naturalWidth * s, h = img.naturalHeight * s;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.drawImage(img, (W - w) / 2 + shift, (H - h) / 2, w, h);
+}
+
+function progress() {
+  const r = hero.getBoundingClientRect();
+  return Math.min(1, Math.max(0, -r.top / (r.height - window.innerHeight)));
+}
+
+function setState(p) {
+  stage.classList.toggle('flight', p > 0.06 && p < 0.93);
+  stage.classList.toggle('finale', p >= 0.93);
+}
+
+function loop() {
+  const p = progress();
+  cur += (p * (N - 1) - cur) * 0.22;
+  const i = Math.round(cur);
+  if (i !== lastDrawn || Math.abs(p - lastP) > 0.002) { draw(i, p); lastDrawn = i; lastP = p; }
+  setState(p);
+  requestAnimationFrame(loop);
+}
+
+// порядок загрузки: каждый 8-й, потом 4-й, 2-й, остальные
+const order = [];
+for (const step of [8, 4, 2, 1]) for (let i = 0; i < N; i += step) if (!order.includes(i)) order.push(i);
+
+const loader = document.getElementById('loader');
+function hideLoader() {
+  if (loader.classList.contains('gone')) return;
+  loader.classList.add('gone');
+  setTimeout(() => stage.classList.add('ready'), 150);
+}
+
+function load(i) {
+  return new Promise((res) => {
+    const img = new Image();
+    img.onload = async () => {
+      try { await img.decode(); } catch (e) {}
+      frames[i] = img; loaded++;
+      if (i === 0) { lastDrawn = -1; }
+      if (loaded >= N * 0.15 || loaded === N) hideLoader();
+      res();
+    };
+    img.onerror = () => { loaded++; res(); };
+    img.src = src(i);
+  });
+}
+
+(async () => {
+  await load(order.shift());           // первый кадр сразу
+  requestAnimationFrame(loop);
+  let k = 0;
+  const worker = async () => { while (k < order.length) await load(order[k++]); };
+  await Promise.all(Array.from({ length: 8 }, worker));
+  hideLoader();
+})();
+</script>
+</body>
+</html>
