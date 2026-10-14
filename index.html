@@ -171,6 +171,19 @@ h1 .q { color: var(--lime); }
   display: grid; place-items: center; transition: opacity .6s, visibility .6s;
 }
 .loader.gone { opacity: 0; visibility: hidden; }
+/* экран загрузки: логотип, над «Ё» по очереди прыгают точки */
+.loader svg { width: min(260px, 56vw); height: auto; overflow: visible; }
+.loader .dot { transform-box: fill-box; transform-origin: 50% 100%; animation: hop .72s infinite; }
+.loader .dot.big { animation-delay: .36s; }
+.loader.landed .dot { animation: none; }
+@keyframes hop {
+  0%   { transform: translateY(0) scale(1.3, .72); animation-timing-function: ease-out; }
+  12%  { transform: translateY(-40%) scale(.92, 1.1); animation-timing-function: ease-out; }
+  50%  { transform: translateY(-260%) scale(1, 1); animation-timing-function: ease-in; }
+  88%  { transform: translateY(-40%) scale(.94, 1.08); animation-timing-function: ease-in; }
+  100% { transform: translateY(0) scale(1.3, .72); }
+}
+@media (prefers-reduced-motion: reduce) { .loader .dot { animation: none; } }
 .menu {
   position: fixed; inset: 0; z-index: 50; padding: 0 var(--pad);
   background: rgba(20, 19, 19, .96); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -204,7 +217,7 @@ h1 .q { color: var(--lime); }
 </head>
 <body>
 
-<div class="loader mono" id="loader">Загрузка</div>
+<div class="loader" id="loader" aria-label="Загрузка"></div>
 
 <header class="hero" id="hero">
   <div class="sticky" id="stage">
@@ -282,6 +295,10 @@ h1 .q { color: var(--lime); }
 // логотип «Щас чё?»: белые буквы, кислотно-зелёные точки (палитра «Кислота»)
 const LOGO = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 60 4070 1180"><g fill="#F2F0EB"><path d="M620 1080L620 375L683 375L683 1080ZM90 1080L90 375L153 375L153 1080ZM123 1080L123 1025L658 1025L658 1080ZM355 1080L355 375L418 375L418 1080ZM692 1210L692 1080L657 1080L657 1025L753 1025L753 1210Z"/><path d="M785 1080L961 375L1073 375L1249 1080L1185 1080L1017 394L1017 394L849 1080ZM895 777L895 721L1139 721L1139 777Z"/><path d="M1484 1097Q1413 1097 1363 1053.5Q1313 1010 1286.5 927.5Q1260 845 1260 728Q1260 642 1275.5 574Q1291 506 1320 458Q1349 410 1390 384.5Q1431 359 1483 359Q1534 359 1573.5 381.5Q1613 404 1640.5 448.5Q1668 493 1683 558L1622 575Q1601 493 1567 454.5Q1533 416 1483 416Q1432 416 1397 452Q1362 488 1343.5 557.5Q1325 627 1325 728Q1325 826 1344 896Q1363 966 1398.5 1003Q1434 1040 1484 1040Q1534 1040 1567.5 1001Q1601 962 1622 881L1683 898Q1667 964 1639 1008.5Q1611 1053 1572.5 1075Q1534 1097 1484 1097Z"/><path d="M2176 838Q2034 838 1947 808.5Q1860 779 1820.5 714.5Q1781 650 1781 545L1781 375L2012 375L2012 528Q2012 574 2027.5 600.5Q2043 627 2081 637.5Q2119 648 2186 648Q2225 648 2261.5 645.5Q2298 643 2334.5 637Q2371 631 2409 623L2409 807Q2370 816 2327.5 823Q2285 830 2245.5 834Q2206 838 2176 838ZM2383 1080L2383 375L2614 375L2614 1080Z"/><path d="M2698 1080L2698 375L3439 375L3439 545L2824 545L2929 418L2929 1038L2824 910L3442 910L3442 1080ZM2849 806L2849 636L3339 636L3339 806Z"/><path d="M3710 830L3710 662L3779 660Q3835 658 3864.5 637.5Q3894 617 3894 583Q3894 548 3869.5 528Q3845 508 3801 508Q3755 508 3726.5 530Q3698 552 3691 593L3509 563Q3517 500 3557 454.5Q3597 409 3662 384Q3727 359 3812 359Q3899 359 3963.5 385.5Q4028 412 4063.5 460Q4099 508 4099 574Q4099 627 4077 666.5Q4055 706 4012 732.5Q3969 759 3903 772L3856 780L3897 752L3897 830ZM3802 1086Q3753 1086 3719.5 1055Q3686 1024 3686 976Q3686 928 3719.5 896Q3753 864 3802 864Q3852 864 3884.5 896Q3917 928 3917 976Q3917 1024 3884.5 1055Q3852 1086 3802 1086Z"/></g><g fill="#BFF831"><circle cx="2935" cy="240" r="60"/><circle cx="3160" cy="195" r="105"/></g></svg>`;
 document.querySelectorAll('.logo').forEach((el) => (el.innerHTML = LOGO));
+// в загрузке тот же логотип, но точки — отдельные прыгающие слои
+document.getElementById('loader').innerHTML = LOGO
+  .replace('<circle cx="2935"', '<circle class="dot" cx="2935"')
+  .replace('<circle cx="3160"', '<circle class="dot big" cx="3160"');
 
 // ссылки пока никуда не ведут
 document.querySelectorAll('[data-soon]').forEach((el) => el.addEventListener('click', (e) => e.preventDefault()));
@@ -362,11 +379,26 @@ function loop() {
 const order = [];
 for (const step of [8, 4, 2, 1]) for (let i = 0; i < N; i += step) if (!order.includes(i)) order.push(i);
 
+// загрузка держится минимум 1,8 с, чтобы точки успели попрыгать;
+// уходит, когда большая точка приземлилась: точки замирают на месте, экран растворяется
 const loader = document.getElementById('loader');
+const t0 = performance.now();
+let leaving = false;
 function hideLoader() {
-  if (loader.classList.contains('gone')) return;
-  loader.classList.add('gone');
-  setTimeout(() => stage.classList.add('ready'), 150);
+  if (leaving) return;
+  leaving = true;
+  setTimeout(() => {
+    const big = loader.querySelector('.dot.big');
+    const land = () => {
+      loader.classList.add('landed');
+      setTimeout(() => {
+        loader.classList.add('gone');
+        setTimeout(() => stage.classList.add('ready'), 150);
+      }, 300);
+    };
+    if (!big || matchMedia('(prefers-reduced-motion: reduce)').matches) return land();
+    big.addEventListener('animationiteration', land, { once: true });
+  }, Math.max(0, 1800 - (performance.now() - t0)));
 }
 
 function load(i) {
